@@ -21,9 +21,9 @@ class CRequest {
      */
     public static function get($key = null){
         if($key){
-            return self::getRequest()->get($key);
+            return static::getRequest()->get($key);
         }
-        return self::getRequest()->get();
+        return static::getRequest()->get();
 
     }
 
@@ -34,9 +34,9 @@ class CRequest {
      */
     public static function post($key = null){
         if($key){
-            return self::getRequest()->post($key);
+            return static::getRequest()->post($key);
         }else{
-            return self::getRequest()->post();
+            return static::getRequest()->post();
         }
     }
 
@@ -46,8 +46,8 @@ class CRequest {
      * @return array|null
      */
     public static function param($key = null){
-        $get = self::get();
-        $post = self::post();
+        $get = static::get();
+        $post = static::post();
         if($key){
             if(isset($post[$key])){
                 return $post[$key] ;
@@ -59,5 +59,30 @@ class CRequest {
         }else{
             return array_merge($get,$post);
         }
+    }
+
+    /**
+     * string the name of the token used to prevent CSRF.
+     *
+     * @return mixed|string
+     */
+    public static function getCsrfName(){
+        return static::getRequest()->csrfParam;
+    }
+
+    /**
+     * The token used to perform CSRF validation.
+     *
+     * @return mixed|string
+     */
+    public static function getCsrfToken(){
+        return static::getRequest()->csrfToken;
+    }
+
+    /**
+     * Get input used to CSRF validation.
+     */
+    public static function getCsrfHtml(){
+        echo CHtml::getCsrf(static::getCsrfName(),static::getCsrfToken());
     }
 } 

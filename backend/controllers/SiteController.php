@@ -6,6 +6,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use helpers\CValidator;
+//use yii\base\DynamicModel;
 
 /**
  * Site controller
@@ -70,6 +72,15 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+//        $validator = CValidator::passes(['name' =>  'xxx'], [
+//            [['name'], 'string', 'max' => 128],
+//        ]);
+//        var_dump($validator);
+//        var_dump($validator->hasErrors());
+//        $model = DynamicModel::validateData(['name' =>  'xxx'], [
+//            [['name'], 'string', 'max' => 128],
+//        ]);
+        exit;
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

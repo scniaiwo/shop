@@ -5,22 +5,16 @@ $params = array_merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
-//shop的核心模块
-$modules = [];
-foreach (glob(__DIR__ . '/modules/*.php') as $filename) {
-    $modules = array_merge($modules, require($filename));
-}
 
 return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => $modules,
     'components' => [
-        'request' => [
-            'csrfParam' => '_csrf-backend',
-        ],
+//        'request' => [
+//            'csrfParam' => '_csrf-backend',
+//        ],
         'user' => [
             'identityClass' => 'backend\models\AdminUser',
             'enableAutoLogin' => true,
@@ -42,13 +36,16 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-//        'urlManager' => [
-//            'enablePrettyUrl' => true,
-//            'showScriptName' => false,
-//            'rules' => [
-//                '' => 'admin/index/index'
-//            ],
-//        ],
+        'assetManager' => [
+//            'forceCopy' => false,
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                '' => 'login/index'
+            ],
+        ],
     ],
     'params' => $params,
 ];
