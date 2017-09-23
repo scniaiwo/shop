@@ -294,7 +294,7 @@ class CHtml {
      * @author liupf  2017/9/21
      */
     public static function getOperationBarDelete($url,$id){
-        return '<a  class="btnDel" href="'.$url.'?id='.$id.'" title="删除" target="ajaxTodo">删除</a>';
+        return '<a  class="btnDel" href="'.$url.'?ids='.$id.'" title="删除" target="ajaxTodo">删除</a>';
     }
 
     /**

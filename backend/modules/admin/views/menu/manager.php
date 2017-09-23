@@ -7,7 +7,7 @@
         <div>
             <ul class="leftTools">
                 <li>
-                    <a class="button" target="dialog" href="<?= \helpers\CUrl::create('/admin/menu/create',true)?>"mask="true">
+                    <a class="button" target="dialog" href="<?= \helpers\CUrl::create('/admin/menu/add',true)?>"mask="true">
                         <span>创建菜单</span>
                     </a>
                 </li>

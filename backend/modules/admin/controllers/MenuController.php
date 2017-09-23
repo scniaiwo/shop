@@ -4,6 +4,7 @@ namespace backend\modules\admin\controllers;
 
 use backend\models\AdminMenu;
 use backend\models\AdminRoleMenu;
+use backend\modules\admin\AdminBaseController;
 use helpers\CRequest;
 use helpers\CResponse;
 use helpers\CUrl;
@@ -29,7 +30,7 @@ class MenuController extends AdminBaseController
     }
 
     /**
-     * Menu  edit page
+     * Menu  modify page
      *
      * @return string
      * @author liupf 2017/9/16
@@ -47,7 +48,7 @@ class MenuController extends AdminBaseController
     }
 
     /**
-     * Modify menu
+     * Edit menu
      *
      * @return array
      * @author liupf 2017/9/16
@@ -70,13 +71,13 @@ class MenuController extends AdminBaseController
     }
 
     /**
-     * Menu create page
+     * Menu add page
      *
      * @return string
      * @author liupf 2017/9/16
      */
-    public function actionCreate(){
-        return $this->renderPartial('create');
+    public function actionAdd(){
+        return $this->renderPartial('add');
     }
 
     /**
@@ -91,7 +92,7 @@ class MenuController extends AdminBaseController
         if( $adminMenu->getErrors() ){
             return CResponse::json(null,300,CValidator::getError($adminMenu));
         }else{
-            return CResponse::json(['callbackType'=>'closeCurrent','navTabId'=>'navTab_2']);
+            return CResponse::json(['callbackType'=>'closeCurrent']);
         }
     }
 
@@ -106,7 +107,8 @@ class MenuController extends AdminBaseController
             return CResponse::json(null,300,'Id can  not empty!');
         }
         $ids = MenuService::factory()->getSubTreeNodeIds($id);
-        MenuService::factory()->deleteMenuByIDs($ids);
+        AdminMenu::deleteAdminMenuByIDs($ids);
         return CResponse::json();
     }
+
 }

@@ -193,15 +193,4 @@ class MenuService extends AbstractService {
         }
         return $adminMenu->can_delete == AdminMenu::$CAN_DELETE ? true : false;
     }
-
-    /**
-     * Delete menu by give IDs
-     *
-     * @param $ids
-     * @return int
-     * @author liupf 2017/9/16
-     */
-    public function deleteMenuByIDs($ids){
-        return AdminMenu::deleteAll(['id'=>$ids]);
-    }
 }

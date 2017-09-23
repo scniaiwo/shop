@@ -133,4 +133,16 @@ class AdminMenu extends \yii\db\ActiveRecord
         $model->save();
         return $model;
     }
+
+    /**
+     * Delete menu by give IDs
+     *
+     * @param $ids
+     * @return int
+     * @author liupf 2017/9/21
+     */
+    public static function deleteAdminMenuByIDs($ids){
+        $numOfDelete =  static::deleteAll(['id'=>$ids]);
+        return count($ids) == $numOfDelete ? true:false;
+    }
 }

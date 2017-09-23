@@ -1,7 +1,7 @@
 <div class="pageContent">
     <form method="post" action="<?= \helpers\CUrl::create('/admin/menu/modify',true);?>" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
         <?= \helpers\CRequest::getCsrfHtml(); ?>
-        <div class="pageFormContent"  style="height:265px;">
+        <div class="pageFormContent"  style="height: 450px">
                     <p>
                         <label>id：</label>
                         <input type="text"  id="current_parent_id"  value="<?=$menu->id; ?>" size="30" name="editForm[id]" readonly="readonly" class="readonly">

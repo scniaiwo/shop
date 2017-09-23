@@ -12,7 +12,7 @@ AppAsset::register($this);
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=7" />
-    <title>简单实用国产jQuery UI框架 - DWZ富客户端框架(J-UI.com)</title>
+    <title>MyShop</title>
     <?php $this->head(); ?>
     <style type="text/css">
         #header{height:85px}

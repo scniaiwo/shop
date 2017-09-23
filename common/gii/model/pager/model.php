@@ -113,11 +113,10 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     * @return  <?= $className ?> || null.
     */
     public static function create($args){
-        $model = new static();
-        if($model->load($args) && $model->save()){
-            return $model;
-        }
-        return null;
+        $model = new <?= $className;?>();
+        $model->attributes = $args;
+        $model->save();
+        return $model;
     }
     /**
     * Update  by the given ID.
@@ -147,7 +146,29 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     }
         return false;
     }
+    /**
+    * Update  by the model.
+    *
+    * @param $model
+    * @param $args
+    * @return <?= $className ?>.
+    */
+    public static function updateByModel($model,$args){
+        $model->attributes = $args;
+        $model->save();
+        return $model;
+    }
 
+    /**
+    * Delete <?= $className ?> by give IDs
+    *
+    * @param $ids
+    * @return int
+    */
+    public static function delete<?= $className ?>ByIDs($ids){
+        $numOfDelete =  static::deleteAll(['id'=>$ids]);
+        return count($ids) == $numOfDelete ? true:false;
+    }
     /**
     * Get Operations
     *

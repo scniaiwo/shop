@@ -57,14 +57,13 @@ class AdminRole extends \yii\db\ActiveRecord
     * Create a new AdminRole.
     *
     * @param $args
-    * @return  AdminRole || null.
+    * @return  AdminRole.
     */
     public static function create($args){
-        $model = new static();
-        if($model->load($args) && $model->save()){
-            return $model;
-        }
-        return null;
+        $model = new AdminRole();
+        $model->attributes = $args;
+        $model->save();
+        return $model;
     }
     /**
     * Update  by the given ID.
@@ -96,6 +95,29 @@ class AdminRole extends \yii\db\ActiveRecord
     }
 
     /**
+     * Update  by the model.
+     *
+     * @param $model
+     * @param $args
+     * @return AdminRole.
+     */
+    public static function updateByModel($model,$args){
+        $model->attributes = $args;
+        $model->save();
+        return $model;
+    }
+
+    /**
+     * delete AdminRole  by the ids.
+     *
+     * @param $ids
+     * @return bool
+     */
+    public static function deleteAdminRoleByIDs($ids){
+        $numOfDelete =  static::deleteAll(['id'=>$ids]);
+        return count($ids) == $numOfDelete ? true:false;
+    }
+    /**
      * Get Operations
      *
      * @return array.
@@ -104,7 +126,7 @@ class AdminRole extends \yii\db\ActiveRecord
         return [
             'edit'    => '/admin/role/edit',
             'delete'  => '/admin/role/delete',
-            'add'     => '/admin/role/dd',
+            'add'     => '/admin/role/add',
         ];
     }
 

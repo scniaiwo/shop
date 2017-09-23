@@ -11,7 +11,6 @@ use Yii;
  * @property string $menu_id
  * @property string $role_id
  * @property string $created_at
- * @property string $updated_at
  */
 class AdminRoleMenu extends \yii\db\ActiveRecord
 {
@@ -31,7 +30,7 @@ class AdminRoleMenu extends \yii\db\ActiveRecord
         return [
             [['menu_id', 'role_id'], 'required'],
             [['menu_id', 'role_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at'], 'safe'],
         ];
     }
 
@@ -45,7 +44,6 @@ class AdminRoleMenu extends \yii\db\ActiveRecord
             'menu_id' => 'Menu ID',
             'role_id' => 'Role ID',
             'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
         ];
     }
     /**
@@ -62,14 +60,14 @@ class AdminRoleMenu extends \yii\db\ActiveRecord
     * Create a new AdminRoleMenu.
     *
     * @param $args
-    * @return  AdminRoleMenu || null.
+    * @return  AdminRoleMenu.
     */
     public static function create($args){
-        $model = new static();
-        if($model->load($args) && $model->save()){
-            return $model;
-        }
-        return null;
+        $model = new AdminRoleMenu();
+        $model->attributes = $args;
+        $model->created_at  = date('Y-m-d H:i:s');
+        $model->save();
+        return $model;
     }
     /**
     * Update  by the given ID.
@@ -99,5 +97,14 @@ class AdminRoleMenu extends \yii\db\ActiveRecord
     }
         return false;
     }
-
+    /**
+     * delete AdminRoleMenu  by the ids.
+     *
+     * @param $ids
+     * @return bool
+     */
+    public static function deleteAdminRoleMenuByIDs($ids){
+        $numOfDelete =  static::deleteAll(['id'=>$ids]);
+        return count($ids) == $numOfDelete ? true:false;
+    }
 }

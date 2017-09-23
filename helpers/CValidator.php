@@ -29,11 +29,13 @@ class CValidator {
         return $model->getFirstErrors()[$key];
     }
 
+    /**
+     * Get Error
+     *
+     * @param $model
+     * @return mixed
+     */
     public static function getError($model){
-        if( empty($model->id) ){
-            return 'Id can not  empty!';
-        }else{
-            static::getFirstError($model);
-        }
+        return static::getFirstError($model);
     }
 }

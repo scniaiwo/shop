@@ -30,7 +30,7 @@ class CUrl {
     }
 
     public static function getCurrentUrl(){
-        return Url::current();
+        return static::create(Url::current(),true);
     }
 
     public static function redirect($url,$params = []){

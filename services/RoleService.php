@@ -7,6 +7,7 @@
  */
 
 namespace services;
+use backend\models\AdminRoleMenu;
 use helpers\CArray;
 use services\AbstractService;
 use Yii;
@@ -49,4 +50,31 @@ class RoleService extends AbstractService {
         return CArray::getColumn($roles,'role_id');
     }
 
+    /**
+     * 保存角色菜单
+     *
+     * @param $roleID
+     * @param $menuIDs
+     * @return bool
+     * @author liupf 2017/9/23
+     */
+    public function saveRoleMenus($roleID,$menuIDs){
+        $numOfSave = 0;
+        $menuIDs = explode(',',$menuIDs);
+        foreach($menuIDs as $menuID){
+            $adminRoleMenu = AdminRoleMenu::create(['role_id'=>$roleID,'menu_id'=>$menuID]);
+            $adminRoleMenu->id >0 && $numOfSave++;
+        }
+        return $numOfSave == count($menuIDs) ? true:false;
+    }
+
+    /**
+     * 删除角色菜单
+     * @param $roleIDs
+     * @return int
+     * @author liupf 2017/9/23
+     */
+    public function deleteRoleMenus($roleIDs){
+        return AdminRoleMenu::deleteAll(['role_id'=>$roleIDs]);
+    }
 }
