@@ -60,7 +60,6 @@ class RoleService extends AbstractService {
      */
     public function saveRoleMenus($roleID,$menuIDs){
         $numOfSave = 0;
-        $menuIDs = explode(',',$menuIDs);
         foreach($menuIDs as $menuID){
             $adminRoleMenu = AdminRoleMenu::create(['role_id'=>$roleID,'menu_id'=>$menuID]);
             $adminRoleMenu->id >0 && $numOfSave++;
@@ -76,5 +75,24 @@ class RoleService extends AbstractService {
      */
     public function deleteRoleMenus($roleIDs){
         return AdminRoleMenu::deleteAll(['role_id'=>$roleIDs]);
+    }
+
+    /**
+     * 修改角色菜单
+     *
+     * @param $roleID
+     * @param $newMenuIDs
+     * @return bool
+     * @author liupf 2017/9/23
+     */
+    public function updateRoleMenus($roleID,$newMenuIDs){
+        $oldMenuIDs    = MenuService::factory()->getActiveRoleMenuIDs([$roleID]);
+        $addMenuIDs    = array_diff($newMenuIDs,$oldMenuIDs);
+        $deleteMenuIDs = array_diff($oldMenuIDs,$newMenuIDs);
+        $saveSuccess = $this->saveRoleMenus($roleID,$addMenuIDs);
+        if($deleteMenuIDs){
+            $numberOfDelete = AdminRoleMenu::deleteAll(['role_id'=>$roleID,'menu_id'=>$deleteMenuIDs]);
+        }
+        return ($saveSuccess && count($deleteMenuIDs) == (int)$numberOfDelete)? true:false;
     }
 }

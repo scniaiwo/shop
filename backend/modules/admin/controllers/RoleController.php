@@ -21,6 +21,7 @@ class RoleController extends AdminBaseController
       /**
      * Renders the index view for the module
      * @return string
+       * @author liupf 2017/9/21
      */
     public function actionManager()
     {
@@ -30,6 +31,12 @@ class RoleController extends AdminBaseController
         return $this->renderPartial('manager',$data);
     }
 
+    /**
+     * Edit role page
+     *
+     * @return string
+     * @author liupf 2017/9/23
+     */
     public function actionEdit(){
         $id = CRequest::param('id');
         if(empty($id)){
@@ -39,13 +46,20 @@ class RoleController extends AdminBaseController
         if(!$role){
             echo 'id is not exist!';exit;
         }
-        return $this->renderPartial('edit',array('role'=>$role));
+        $menuIDs = MenuService::factory()->getActiveRoleMenuIDs([$id]);
+        return $this->renderPartial('edit',array('role'=>$role,'menuIDs'=>array_flip($menuIDs)));
     }
 
+    /**
+     * modify role
+     *
+     * @return array
+     * @author liupf 2017/9/23
+     */
     public function actionModify(){
         $editForm = CRequest::param('editForm');
-        if( empty($editForm['id'])){
-            return CResponse::json(null,300,'Id can not empty!');
+        if( empty($editForm['id']) || empty($editForm['selectIDs'])){
+            return CResponse::json(null,300,' Parameter error!');
         }
         $role = AdminRole::findById($editForm['id']);
         if( empty($role) ){
@@ -55,10 +69,17 @@ class RoleController extends AdminBaseController
         if( $adminMenu->getErrors()){
             return CResponse::json(null,300,CValidator::getError($adminMenu));
         }else{
-            return CResponse::json();
+            $isSuccess = RoleService::factory()->updateRoleMenus($editForm['id'],explode(',',$editForm['selectIDs']));
+            return $isSuccess ? CResponse::json(['callbackType'=>'closeCurrent']):CResponse::json(null,300,'Modify Failure!');
         }
     }
 
+    /**
+     * delete  role
+     *
+     * @return array
+     * @author liupf 2017/9/23
+     */
     public function actionDelete(){
         $ids = CRequest::param('ids');
         if(empty($ids)){
@@ -92,17 +113,17 @@ class RoleController extends AdminBaseController
      */
     public function actionSave(){
         $createForm = CRequest::param('createForm');
-        $menuIDs    = $createForm['menuIDs'];
+        $menuIDs    = $createForm['selectIDs'];
         if(empty($menuIDs)){
-            return CResponse::json(null,300,'参数错误');
+            return CResponse::json(null,300,'Parameter error!');
         }
         $role = AdminRole::create($createForm);
         if( $role->getErrors() ){
             return CResponse::json(null,300,CValidator::getError($role));
         }else{
-            $isSuccess = RoleService::factory()->saveRoleMenus($role->id,substr($menuIDs,0,-1));
+            $isSuccess = RoleService::factory()->saveRoleMenus($role->id,explode(',',$menuIDs));
             return $isSuccess ? CResponse::json(['callbackType'=>'closeCurrent']):
-                CResponse::json(null,300,'保存菜单失败');
+                CResponse::json(null,300,'Save Failure');
         }
     }
 }
