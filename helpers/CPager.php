@@ -86,7 +86,7 @@ class CPager {
     public function initOperations(){
         $operations = $this->_obj->getOperations();
         foreach($operations as $k=>$v){
-            $this->_operations[$k] = CUrl::create($v,true);
+            $this->_operations[$k] = CUrl::create($v);
         }
     }
 

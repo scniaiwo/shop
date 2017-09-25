@@ -39,8 +39,8 @@ class AdminUserForm extends AdminUser
             // rememberMe must be a boolean value
 //            ['rememberMe', 'boolean'],
             ['password', 'validatePassword','on'=>['login','edit']],
-            [['newPassword','rePassword'],'required','on'=>['edit']],
-            ['newPassword','validateRePassword','on'=>['edit']]
+//            [['newPassword','rePassword'],'required','on'=>['changePassword']],
+//            ['newPassword','validateRePassword','on'=>['changePassword']]
         ];
     }
 

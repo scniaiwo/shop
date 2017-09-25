@@ -7,12 +7,12 @@
         <div>
             <ul class="leftTools">
                 <li>
-                    <a class="button" target="dialog" href="<?= \helpers\CUrl::create('/admin/menu/add',true)?>"mask="true">
+                    <a class="button" target="dialog" href="<?= \helpers\CUrl::create('/admin/menu/add')?>"mask="true">
                         <span>创建菜单</span>
                     </a>
                 </li>
                 <li>
-                    <a class="button deleteMenu" href="javascript:" rel="<?= \helpers\CUrl::create('/admin/menu/delete',true)?>" mask="true">
+                    <a class="button deleteMenu" href="javascript:" rel="<?= \helpers\CUrl::create('/admin/menu/delete')?>" mask="true">
                         <span>删除菜单</span>
                     </a>
                     <a class="btnDel btnDelMenu" style="display:none;" target="ajaxTodo" rel="pagerForm" title="删除后，菜单对应的所有子菜单都会被删除，确定操作吗？">删除</a>

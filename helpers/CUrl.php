@@ -17,7 +17,7 @@ class CUrl {
      * @param bool $scheme
      * @return string
      */
-    public static function create($url = '',$scheme = false){
+    public static function create($url = '',$scheme = true){
         return Url::to($url,$scheme);
     }
 

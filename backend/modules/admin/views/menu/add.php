@@ -1,5 +1,5 @@
 <div class="pageContent">
-    <form method="post" action="<?= \helpers\CUrl::create('/admin/menu/save',true);?>" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)" ref="pagerForm">
+    <form method="post" action="<?= \helpers\CUrl::create('/admin/menu/add');?>" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)" ref="pagerForm">
         <?= \helpers\CRequest::getCsrfHtml(); ?>
         <div class="pageFormContent" layoutH="58">
             <div class="unit">

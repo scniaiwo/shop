@@ -1,5 +1,5 @@
 <div class="pageContent">
-    <form method="post" action="<?= \helpers\CUrl::create('/admin/menu/modify',true);?>" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+    <form method="post" action="<?= \helpers\CUrl::create('/admin/menu/modify');?>" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
         <?= \helpers\CRequest::getCsrfHtml(); ?>
         <div class="pageFormContent"  style="height: 450px">
                     <p>

@@ -3,23 +3,20 @@
 namespace backend\modules\admin\controllers;
 
 use backend\models\AdminMenu;
-use backend\models\AdminRoleMenu;
 use backend\modules\admin\AdminBaseController;
 use helpers\CRequest;
 use helpers\CResponse;
-use helpers\CUrl;
 use helpers\CValidator;
 use services\MenuService;
 use services\Test;
 use Yii;
-use yii\web\Controller;
 /**
  * MenuController controller for the `admin` module
  */
 class MenuController extends AdminBaseController
 {
     /**
-     * Menu manage  page
+     * Menu manage  view
      *
      * @return string
      * @author liupf 2017/9/16
@@ -30,7 +27,7 @@ class MenuController extends AdminBaseController
     }
 
     /**
-     * Menu  modify page
+     * Menu  edit view
      *
      * @return string
      * @author liupf 2017/9/16
@@ -48,7 +45,7 @@ class MenuController extends AdminBaseController
     }
 
     /**
-     * Edit menu
+     * Modify menu
      *
      * @return array
      * @author liupf 2017/9/16
@@ -71,23 +68,18 @@ class MenuController extends AdminBaseController
     }
 
     /**
-     * Menu add page
+     * Menu add view
      *
      * @return string
      * @author liupf 2017/9/16
      */
     public function actionAdd(){
-        return $this->renderPartial('add');
-    }
-
-    /**
-     * Save a new menu
-     *
-     * @return array
-     * @author liupf 2017/9/16
-     */
-    public function actionSave(){
         $createForm = CRequest::param('createForm');
+
+        if( !$createForm ){
+            return $this->renderPartial('add');
+        }
+
         $adminMenu = AdminMenu::create($createForm);
         if( $adminMenu->getErrors() ){
             return CResponse::json(null,300,CValidator::getError($adminMenu));

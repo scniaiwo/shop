@@ -19,7 +19,7 @@ use helpers\CResponse;
 class RoleController extends AdminBaseController
 {
       /**
-     * Renders the index view for the module
+     * Renders the manager view for the module
      * @return string
        * @author liupf 2017/9/21
      */
@@ -32,7 +32,7 @@ class RoleController extends AdminBaseController
     }
 
     /**
-     * Edit role page
+     * Edit role view
      *
      * @return string
      * @author liupf 2017/9/23
@@ -69,8 +69,10 @@ class RoleController extends AdminBaseController
         if( $adminMenu->getErrors()){
             return CResponse::json(null,300,CValidator::getError($adminMenu));
         }else{
-            $isSuccess = RoleService::factory()->updateRoleMenus($editForm['id'],explode(',',$editForm['selectIDs']));
-            return $isSuccess ? CResponse::json(['callbackType'=>'closeCurrent']):CResponse::json(null,300,'Modify Failure!');
+            $selectIDs = explode(',',$editForm['selectIDs']);
+            $isSuccess = RoleService::factory()->updateRoleMenus($editForm['id'],$selectIDs);
+            return $isSuccess ? CResponse::json(['callbackType'=>'closeCurrent']):
+                                CResponse::json(null,300,'Modify Failure!');
         }
     }
 
@@ -96,7 +98,7 @@ class RoleController extends AdminBaseController
     }
 
     /**
-     * Role add page
+     * Role add view
      *
      * @return string
      * @author liupf 2017/9/16
