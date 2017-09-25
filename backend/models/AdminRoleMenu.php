@@ -103,7 +103,7 @@ class AdminRoleMenu extends \yii\db\ActiveRecord
      * @param $ids
      * @return bool
      */
-    public static function deleteAdminRoleMenuByIDs($ids){
+    public static function deleteByIDs($ids){
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }

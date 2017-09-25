@@ -10,6 +10,8 @@ use Yii;
  * @property string $id
  * @property string $name
  * @property string $description
+ * @property string $created_at
+ * @property string $updated_at
  */
 class AdminRole extends \yii\db\ActiveRecord
 {
@@ -41,6 +43,8 @@ class AdminRole extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'description' => 'Description',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
     /**
@@ -62,6 +66,8 @@ class AdminRole extends \yii\db\ActiveRecord
     public static function create($args){
         $model = new AdminRole();
         $model->attributes = $args;
+        $model->created_at = date('Y-m-d H:i:s');
+        $model->updated_at = date('Y-m-d H:i:s');
         $model->save();
         return $model;
     }
@@ -103,6 +109,7 @@ class AdminRole extends \yii\db\ActiveRecord
      */
     public static function updateByModel($model,$args){
         $model->attributes = $args;
+        $model->updated_at = date('Y-m-d H:i:s');
         $model->save();
         return $model;
     }
@@ -113,7 +120,7 @@ class AdminRole extends \yii\db\ActiveRecord
      * @param $ids
      * @return bool
      */
-    public static function deleteAdminRoleByIDs($ids){
+    public static function deleteByIDs($ids){
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }
@@ -124,9 +131,19 @@ class AdminRole extends \yii\db\ActiveRecord
      */
     public function getOperations(){
         return [
-            'edit'    => '/admin/role/edit',
-            'delete'  => '/admin/role/delete',
-            'add'     => '/admin/role/add',
+            'add'     => [
+                'url'    => '/admin/role/add',
+                'width'  => 1000,
+                'height' => 580
+            ],
+            'edit'    => [
+                'url'    => '/admin/role/edit',
+                'width'  => 1000,
+                'height' => 580
+            ],
+            'delete'  =>[
+                'url'    => '/admin/role/delete',
+            ],
         ];
     }
 

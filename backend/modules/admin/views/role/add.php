@@ -1,5 +1,5 @@
 <div class="pageContent">
-    <form method="post" action="<?= \helpers\CUrl::create('/admin/role/save')?>" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)" ref="pagerForm">
+    <form method="post" action="<?= \helpers\CUrl::create('/admin/role/add')?>" class="pageForm required-validate" onsubmit="return validateCallback(this,dialogAjaxDone)" ref="pagerForm">
         <?= \helpers\CRequest::getCsrfHtml(); ?>
         <input id="selectIDs" type="text" name="createForm[selectIDs]" size="30" hidden="hidden" class="required"/>
         <div class="pageContent sortDrag" selector="h1" layoutH="42">

@@ -115,6 +115,11 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     public static function create($args){
         $model = new <?= $className;?>();
         $model->attributes = $args;
+<?php foreach ($tableSchema->columns as $column):?>
+    <?php if($column->name == 'created_at'  || $column->name == 'updated_at' ):?>
+        $model-><?=$column->name;?> = date('Y-m-d H:i:s');
+    <?php endif?>
+<?php endforeach; ?>
         $model->save();
         return $model;
     }
@@ -155,6 +160,11 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     */
     public static function updateByModel($model,$args){
         $model->attributes = $args;
+<?php foreach ($tableSchema->columns as $column):?>
+    <?php if($column->name == 'updated_at' ):?>
+        $model-><?=$column->name;?> = date('Y-m-d H:i:s');
+    <?php endif?>
+<?php endforeach; ?>
         $model->save();
         return $model;
     }
@@ -165,7 +175,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     * @param $ids
     * @return int
     */
-    public static function delete<?= $className ?>ByIDs($ids){
+    public static function deleteByIDs($ids){
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }
@@ -174,11 +184,21 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     *
     * @return array.
     */
-    public function getOperations(){
+    public static function getOperations(){
         return [
-            'edit'    => '',
-            'delete'  => '',
-            'add'     => '',
+            'add'     => [
+                'url'    => '',
+                'width'  => 1000,
+                'height' => 580
+            ],
+            'delete'  => [
+                 'url'    => '',
+            ],
+            'edit'    => [
+                'url'    => '',
+                'width'  => 1000,
+                'height' => 580
+            ],
         ];
     }
 
@@ -187,7 +207,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
         *
         * @return array.
         */
-        public function getTableFields(){
+        public static function getTableFields(){
             return [
 <?php foreach ($tableSchema->columns as $column):?>
                      [
@@ -196,33 +216,81 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
                         'label'         =>  '<?= $column->comment ;?>' ,
                         'width'         =>  10 ,
                         'align'         =>  'left' ,
+<?php $searchType = \helpers\CPager::getSearchType($column->type);?>
+<?php  if($searchType == 'select'):?>
+                        'values'         =>[
+                        ]
+<?php endif?>
                      ],
 <?php endforeach; ?>
             ];
         }
 
-    /**
-    * Get search fields
-    *
-    * @return array.
-    */
-    public function getSearchFields(){
-        return [
+        /**
+        * Get search fields
+        *
+        * @return array.
+        */
+        public static function getSearchFields(){
+            return [
 <?php foreach ($tableSchema->columns as $column): ?>
 <?php $searchType = \helpers\CPager::getSearchType($column->type);?>
-                [
-                    'type'         =>  '<?= $searchType;?>',
-                    'title'        =>  '<?= $column->comment ;?>',
-                    'name'         =>  '<?= $column->name ;?>' ,
-                    'columns_type' =>  '<?= \helpers\CPager::getSearchColumnType($column->type) ;?>',
+                    [
+                        'type'         =>  '<?= $searchType;?>',
+                        'title'        =>  '<?= $column->comment ;?>',
+                        'name'         =>  '<?= $column->name ;?>' ,
+                        'columns_type' =>  '<?= \helpers\CPager::getSearchColumnType($column->type) ;?>',
 <?php  if( in_array( $searchType,['select','dateRange'])):?>
-                    'value'        =>[
+                        'values'       =>[
+                        ]
+<?php endif?>
+                     ],
+<?php endforeach; ?>
+            ];
+      }
+
+
+        /**
+        * Get edit fields
+        *
+        * @return array.
+        */
+        public static function getEditFields(){
+            return [
+<?php foreach ($tableSchema->columns as $column): ?>
+<?php $searchType = \helpers\CPager::getSearchType($column->type);?>
+                    [
+                        'type'         =>  '<?= $searchType;?>',
+                        'label'        =>  '<?= $column->comment ;?>',
+                        'name'         =>  '<?= $column->name ;?>' ,
+<?php  if( in_array( $searchType,['select','dateRange'])):?>
+                        'values'       =>[
+                         ]
+<?php endif?>
+                    ],
+<?php endforeach; ?>
+           ];
+        }
+
+        /**
+        * Get create fields
+        *
+        * @return array.
+        */
+        public static function getCreateFields(){
+            return [
+<?php foreach ($tableSchema->columns as $column): ?>
+<?php $searchType = \helpers\CPager::getSearchType($column->type);?>
+                    [
+                    'type'         =>  '<?= $searchType;?>',
+                    'label'        =>  '<?= $column->comment ;?>',
+                    'name'         =>  '<?= $column->name ;?>' ,
+<?php  if( in_array( $searchType,['select','dateRange'])):?>
+                    'values'       =>[
                     ]
 <?php endif?>
-                ],
+                   ],
 <?php endforeach; ?>
-        ];
-    }
-
-
+             ];
+        }
 }

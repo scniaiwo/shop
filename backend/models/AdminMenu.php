@@ -141,7 +141,7 @@ class AdminMenu extends \yii\db\ActiveRecord
      * @return int
      * @author liupf 2017/9/21
      */
-    public static function deleteAdminMenuByIDs($ids){
+    public static function deleteByIDs($ids){
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }

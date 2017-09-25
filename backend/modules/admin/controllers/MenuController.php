@@ -99,7 +99,7 @@ class MenuController extends AdminBaseController
             return CResponse::json(null,300,'Id can  not empty!');
         }
         $ids = MenuService::factory()->getSubTreeNodeIds($id);
-        AdminMenu::deleteAdminMenuByIDs($ids);
+        AdminMenu::deleteByIDs($ids);
         return CResponse::json();
     }
 

@@ -115,6 +115,11 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     public static function create($args){
         $model = new <?= $className;?>();
         $model->attributes = $args;
+<?php foreach ($tableSchema->columns as $column):?>
+    <?php if($column->name == 'created_at'  || $column->name == 'updated_at' ):?>
+        $model-><?=$column->name;?> = date('Y-m-d H:i:s');
+    <?php endif?>
+<?php endforeach; ?>
         $model->save();
         return $model;
     }
@@ -156,6 +161,11 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     */
     public static function updateByModel($model,$args){
         $model->attributes = $args;
+<?php foreach ($tableSchema->columns as $column):?>
+<?php if($column->name == 'updated_at' ):?>
+        $model-><?=$column->name;?> = date('Y-m-d H:i:s');
+<?php endif?>
+<?php endforeach; ?>
         $model->save();
         return $model;
     }
@@ -166,7 +176,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     * @param $ids
     * @return int
     */
-    public static function delete<?= $className ?>ByIDs($ids){
+    public static function deleteByIDs($ids){
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }

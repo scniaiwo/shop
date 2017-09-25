@@ -56,6 +56,9 @@ $bannerPath = $this->assetManager->publish('@backend/assets/dwz_jui/themes/defau
 						<input class="code" type="text" size="5" />
 						<span><img src="<?= $bgPath[1]; ?>" alt="" width="75" height="24" /></span>
 					</p>
+                    <p>
+                        <span style="color:#cc0000"><?= $error; ?> </span>
+                    </p>
 					<div class="login_bar">
 						<input class="sub" type="submit" value=" " />
 					</div>

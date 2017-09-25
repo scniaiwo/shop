@@ -8,6 +8,7 @@
 namespace backend\controllers;
 use backend\models\AdminUser\AdminUserForm;
 use helpers\CResponse;
+use helpers\CValidator;
 use Yii;
 use helpers\CUser;
 use yii\web\Controller;
@@ -26,8 +27,9 @@ class LoginController  extends Controller {
             if($adminUserForm->login()){
                 $this->redirect('/admin/index/index')->send();
             }
+            $error = CValidator::getError($adminUserForm);
         }
-       return $this->renderPartial('index');
+       return $this->renderPartial('index',array('error'=>$error));
     }
 
     public function actionDialog(){

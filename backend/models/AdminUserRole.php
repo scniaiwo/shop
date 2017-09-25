@@ -60,14 +60,14 @@ class AdminUserRole extends \yii\db\ActiveRecord
     * Create a new AdminUserRole.
     *
     * @param $args
-    * @return  AdminUserRole || null.
+    * @return  AdminUserRolel.
     */
     public static function create($args){
-        $model = new static();
-        if($model->load($args) && $model->save()){
-            return $model;
-        }
-        return null;
+        $model = new AdminUserRole();
+        $model->attributes = $args;
+        $model->created_at = date('Y-m-d H:i:s');
+        $model->save();
+        return $model;
     }
     /**
     * Update  by the given ID.
@@ -97,5 +97,14 @@ class AdminUserRole extends \yii\db\ActiveRecord
     }
         return false;
     }
-
+    /**
+     * delete AdminUserRole  by the ids.
+     *
+     * @param $ids
+     * @return bool
+     */
+    public static function deleteByIDs($ids){
+        $numOfDelete =  static::deleteAll(['id'=>$ids]);
+        return count($ids) == $numOfDelete ? true:false;
+    }
 }

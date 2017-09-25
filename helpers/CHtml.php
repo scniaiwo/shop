@@ -42,11 +42,11 @@ class CHtml {
         $searchBar =  '<ul class="searchContent">';
         foreach($searchFields as $searchField){
             switch($searchField['type']){
-                case 'text'      : $temp = static::getSearchBarText($searchField,$params);break;
-                case 'date'      : $temp = static::getSearchBarDate($searchField,$params);break;
-                case 'dateRange' : $temp = static::getSearchBarDateRange($searchField,$params);break;
-                case 'select'    : $temp = static::getSearchBarSelect($searchField,$params);break;
-                case 'range'    : $temp = static::getSearchBarRange($searchField,$params);break;
+                case 'text'      : $temp = static::getSearchText($searchField,$params);break;
+                case 'date'      : $temp = static::getSearchDate($searchField,$params);break;
+                case 'dateRange' : $temp = static::getSearchDateRange($searchField,$params);break;
+                case 'select'    : $temp = static::getSearchSelect($searchField,$params);break;
+                case 'range'    : $temp = static::getSearchRange($searchField,$params);break;
                 default          : $temp = '';
             }
             $searchBar.=$temp;
@@ -68,7 +68,7 @@ class CHtml {
      * @return string
      * @author liupf 2017/9/21
      */
-    public static function getSearchBarText($searchField,$params){
+    public static function getSearchText($searchField,$params){
         $searchText  = '<li>';
         $searchText .= "<label>{$searchField['title']}：</label>";
         $searchText .= '<input type="text" name="'.$searchField['name'].'" value="'.$params[$searchField['name']].'"/>';
@@ -84,10 +84,10 @@ class CHtml {
      * @return string
      * @author liupf 2017/9/21
      */
-    public static function getSearchBarDate($searchField,$params){
+    public static function getSearchDate($searchField,$params){
         $searchDate  = '<li>';
         $searchDate .= "<label>{$searchField['title']}：</label>";
-        $searchDate .= '<input type="date" name="'.$searchField['name'].'" value="'.$params[$searchField['name']].'" readonly="true"/>"';
+        $searchDate .= '<input type="date" name="'.$searchField['name'].'" value="'.$params[$searchField['name']].'" readonly="true"/>';
         $searchDate .= '</li>';
         return $searchDate;
     }
@@ -99,12 +99,12 @@ class CHtml {
  * @param $params
  * @return string
  */
-    public static function getSearchBarDateRange($searchField,$params){
+    public static function getSearchDateRange($searchField,$params){
         $searchDateRange = '';
-        foreach($searchField['value'] as $k=>$v){
+        foreach($searchField['values'] as $k=>$v){
             $searchDateRange .= '<li>';
             $searchDateRange .= "<label>{$v}：</label>";
-            $searchDateRange .= '<input type="date" name="'.$searchField['name'].$k.'" value="'.$params[$searchField['name'].$k].'" readonly="true"/>"';
+            $searchDateRange .= '<input type="date" name="'.$searchField['name'].$k.'" value="'.$params[$searchField['name'].$k].'" readonly="true"/>';
             $searchDateRange .= '</li>';
         }
         return  $searchDateRange;
@@ -117,9 +117,9 @@ class CHtml {
      * @param $params
      * @return string
      */
-    public static function getSearchBarRange($searchField,$params){
+    public static function getSearchRange($searchField,$params){
         $searchDateRange = '';
-        foreach($searchField['value'] as $k=>$v){
+        foreach($searchField['values'] as $k=>$v){
             $searchDateRange .= '<li>';
             $searchDateRange .= "<label>{$v}：</label>";
             $searchDateRange .= '<input type="text" name="'.$searchField['name'].$k.'" value="'.$params[$searchField['name'].$k].'"/>"';
@@ -136,11 +136,11 @@ class CHtml {
      * @return string
      * @author liupf 2017/9/21
      */
-    public static function getSearchBarSelect($searchField,$params){
+    public static function getSearchSelect($searchField,$params){
         $searchSelect = '<select class="combox" name="'.$searchField['name'].'">';
-         foreach( $searchField['value'] as $k=>$v){
+         foreach( $searchField['values'] as $k=>$v){
              $selected = ($k == $params['name']) ? 'selected="selected"':'';
-             $searchSelect .= '<option value="'.$k.'" '.$selected.'>北京</option>';
+             $searchSelect .= '<option value="'.$k.'" '.$selected.'>'.$v.'</option>';
          }
          $searchSelect .= '</select>';
          return $searchSelect;
@@ -157,9 +157,9 @@ class CHtml {
         $toolBar = '';
         foreach($operations as $k=>$v){
             switch( $k){
-                case   'edit'  : $temp = static::getToolBarEdit($v);break;
-                case   'add'   : $temp = static::getToolBarAdd($v);break;
-                case   'delete': $temp = static::getToolBarDelete($v);break;
+                case   'edit'  : $temp = static::getToolEdit($v);break;
+                case   'add'   : $temp = static::getToolAdd($v);break;
+                case   'delete': $temp = static::getToolDelete($v['url']);break;
                 default        : $temp = '';break;
             }
             $toolBar .= $temp;
@@ -170,23 +170,23 @@ class CHtml {
     /**
      * Get tool bar edit
      *
-     * @param $url
+     * @param $operation
      * @return string
      * @author liupf  2017/9/21
      */
-    public static function getToolBarEdit($url){
-        return '<li><a class="edit" href="'.$url.'?id={id}" target="dialog" height="580" width="1000" drawable="true" mask="true"><span>修改</span></a></li>';
+    public static function getToolEdit($operation){
+        return '<li><a class="edit" href="'.$operation['url'].'?id={id}" target="dialog" height="'.$operation['height'].'" width="'.$operation['width'].'" drawable="true" mask="true"><span>修改</span></a></li>';
     }
 
     /**
      * Get tool bar add
      *
-     * @param $url
+     * @param $operation
      * @return string
      * @author liupf  2017/9/21
      */
-    public static function getToolBarAdd($url){
-        return '<li><a class="add" href="'.$url.'"  target="dialog" height="580" width="1000" drawable="true" mask="true"><span>添加</span></a></li>';
+    public static function getToolAdd($operation){
+        return '<li><a class="add" href="'.$operation['url'].'"  target="dialog" height="'.$operation['height'].'" width="'.$operation['width'].'" drawable="true" mask="true"><span>添加</span></a></li>';
      }
 
     /**
@@ -196,7 +196,7 @@ class CHtml {
      * @return string
      * @author liupf  2017/9/21
      */
-    public static function getToolBarDelete($url){
+    public static function getToolDelete($url){
         return '<li><a class="delete" href="'.$url.'" target="selectedTodo" title="确实要删除这些记录吗?"  rel="ids" postType="string"><span>批量删除</span></a></li>';
     }
 
@@ -241,7 +241,11 @@ class CHtml {
                 $tableBody .= '<td><input name="ids" value="'.$t['id'].'" type="checkbox"></td>';
             }
             foreach($tableFields as $tableField){
-                $tableBody .= '<td>'.$t[$tableField['name']].'</td>';
+                if(isset($tableField['values'])){
+                    $tableBody .= '<td>'.$tableField['values'][$t[$tableField['name']]].'</td>';
+                }else{
+                    $tableBody .= '<td>'.$t[$tableField['name']].'</td>';
+                }
             }
             if($operations['edit'] || $operations['delete'] ){
                 $tableBody .= static::getOperationBar($operations,$t['id']);
@@ -263,8 +267,8 @@ class CHtml {
         $operationBar = '<td>';
         foreach($operations as $k=>$v){
             switch($k){
-                case   'edit'  : $temp = static::getOperationBarEdit($v,$id);break;
-                case   'delete': $temp = static::getOperationBarDelete($v,$id);break;
+                case   'edit'  : $temp = static::getOperationEdit($v,$id);break;
+                case   'delete': $temp = static::getOperationDelete($v,$id);break;
                 default        : $temp = '';break;
             }
             $operationBar .= $temp;
@@ -276,13 +280,13 @@ class CHtml {
     /**
      * Get operation bar edit
      *
-     * @param $url
+     * @param $operation
      * @param $id
      * @return string
      * @author liupf  2017/9/21
      */
-    public static function getOperationBarEdit($url,$id){
-        return '<a class="btnEdit" href="'.$url.'?id='.$id.'" title="编辑" target="dialog" mask="true" drawable="true" width="1000" height="580">编辑</a>';
+    public static function getOperationEdit($operation,$id){
+        return '<a class="btnEdit" href="'.$operation['url'].'?id='.$id.'" title="编辑" target="dialog" mask="true" drawable="true" width="'.$operation['width'].'" height="'.$operation['height'].'">编辑</a>';
     }
 
     /**
@@ -293,7 +297,7 @@ class CHtml {
      * @return string
      * @author liupf  2017/9/21
      */
-    public static function getOperationBarDelete($url,$id){
+    public static function getOperationDelete($url,$id){
         return '<a  class="btnDel" href="'.$url.'?ids='.$id.'" title="删除" target="ajaxTodo">删除</a>';
     }
 
@@ -332,4 +336,81 @@ class CHtml {
     public static function getCsrf($name,$value){
         return '<input name="'.$name.'" type="hidden" id="'.$name.'" value="'.$value.'">';
     }
+
+    /**
+     * Get Edit field  set
+     *
+     * @param $editFields
+     * @param $model
+     * @return string
+     * @author liupf  2017/9/25
+     */
+    public static function getEditFieldSet($editFields,$model){
+        $editFieldSet = '';
+        foreach($editFields as $editField){
+            $value = $model->$editField['name'] ?:'';
+            switch( $editField['type']){
+                case   'text'  : $temp = static::getEditFieldText($editField,$value);break;
+                case   'date'  : $temp = static::getEditFieldDate($editField,$value);break;
+                case   'select': $temp = static::getEditFieldSelect($editField,$value);break;
+                default        : $temp = '';break;
+            }
+            $editFieldSet .= $temp;
+        }
+        return $editFieldSet;
+    }
+
+    /**
+     * Get edit field text
+     *
+     * @param $editField
+     * @param $value
+     * @return string
+     * @author liupf  2017/9/22
+     */
+    public static function getEditFieldText($editField,$value){
+        $str = '<dl>';
+        $str .= '<dt>'.$editField['label'].'：</dt>';
+        $str .= '<dd><input class="'.($editField['required']?'required':'').'" '.($editField['readonly']? 'readonly':'').' name="editForm['.$editField['name'].']" value="'.$value.'" type="text" size="30" /></dd>';
+        $str .=' </dl>';
+        return $str;
+    }
+
+    /**
+     * Get edit field date
+     *
+     * @param $editField
+     * @param $value
+     * @return string
+     * @author liupf  2017/9/22
+     */
+    public static function getEditFieldDate($editField,$value){
+        $str = '<dl>';
+        $str .= '<dt>'.$editField['label'].'：</dt>';
+        $str .= '<dd><input class="date" readonly name="editForm['.$editField['name'].']" value="'.$value.'" type="text" size="30" /></dd>';
+        $str .= '<a class="inputDateButton" href="javascript:;">选择</a>';
+        $str .=' </dl>';
+        return $str;
+    }
+
+    /**
+     * Get edit field select
+     *
+     * @param $editField
+     * @param $value
+     * @return string
+     * @author liupf  2017/9/22
+     */
+    public static function getEditFieldSelect($editField,$value){
+        $str = '<dl>';
+        $str .= '<dt>'.$editField['label'].'：</dt>';
+        $str .= '<dd><select class="combox" name="editForm['.$editField['name'].']">';
+        foreach($editField['values'] as $k=>$v){
+            $selected = ($k == $value) ? 'selected="selected"':'';
+            $str .= '<option value="'.$k.'" '.$selected.'>'.$v.'</option>';
+        }
+        $str .= '</select></dd></dl>';
+        return $str;
+    }
+
 }

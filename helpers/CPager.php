@@ -86,7 +86,8 @@ class CPager {
     public function initOperations(){
         $operations = $this->_obj->getOperations();
         foreach($operations as $k=>$v){
-            $this->_operations[$k] = CUrl::create($v);
+            $v['url'] = CUrl::create($v['url']);
+            $this->_operations[$k] = $v;
         }
     }
 
@@ -196,7 +197,7 @@ class CPager {
             $type = $searchField['type'];
             $name = $searchField['name'];
             $columnsType = isset($field['columnsType']) ? $field['columnsType'] : '';
-            if($this->_params[$name] || $this->_params[$name.'_get'] || $this->_params[$name.'_lt']){
+            if($this->_params[$name] || $this->_params[$name.'_gte'] || $this->_params[$name.'_lt']){
                 if($type == 'text' || $type == 'select' || $type == 'date'){
                     switch($columnsType){
                         case 'string' : $query->andWhere(['like', $name, $this->_params[$name]]);break;
@@ -251,7 +252,8 @@ class CPager {
     public static function getSearchType($type){
         switch($type){
             case 'datetime': $searchType = 'dateRange';break;
-            case 'tinyint' : $searchType = 'select';break;
+            case 'tinyint' :
+            case 'smallint' : $searchType = 'select';break;
             default        : $searchType = 'text';break;
         }
         return $searchType;

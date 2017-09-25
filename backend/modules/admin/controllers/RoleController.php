@@ -88,7 +88,7 @@ class RoleController extends AdminBaseController
             return CResponse::json(null,300,'Id can  not empty!');
         }
         $ids = explode(',',$ids);
-        $isSuccess = AdminRole::deleteAdminRoleByIDs($ids);
+        $isSuccess = AdminRole::deleteByIDs($ids);
         if($isSuccess){
             RoleService::factory()->deleteRoleMenus($ids);
             return CResponse::json();
@@ -98,23 +98,15 @@ class RoleController extends AdminBaseController
     }
 
     /**
-     * Role add view
+     * Role add
      *
-     * @return string
      * @author liupf 2017/9/16
      */
     public function actionAdd(){
-        return $this->renderPartial('add');
-    }
-
-    /**
-     * Save a new role
-     *
-     * @return array
-     * @author liupf 2017/9/16
-     */
-    public function actionSave(){
         $createForm = CRequest::param('createForm');
+        if( !$createForm ){
+            return $this->renderPartial('add');
+        }
         $menuIDs    = $createForm['selectIDs'];
         if(empty($menuIDs)){
             return CResponse::json(null,300,'Parameter error!');
