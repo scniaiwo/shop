@@ -116,9 +116,8 @@ class UserController extends AdminBaseController
             return CResponse::json(null,300,'Id can  not empty!');
         }
         $ids = explode(',',$ids);
-        $isSuccess = AdminUser::deleteByIDs($ids);
+        $isSuccess = AdminUser::updateStatusByIDs($ids,AdminUser::STATUS_DELETED);
         if($isSuccess){
-            RoleService::factory()->deleteUserRoles($ids);
             return CResponse::json();
         }else{
             return CResponse::json(null,300,'Failure!');

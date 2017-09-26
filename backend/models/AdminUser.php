@@ -18,7 +18,7 @@ use yii\web\IdentityInterface;
 class AdminUser extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 2;
-    const STATUS_ACTIVE  = 1;
+    const STATUS_COMMON  = 1;
 
     /**
      * @inheritdoc
@@ -28,8 +28,8 @@ class AdminUser extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'password'], 'required'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_COMMON],
+            ['status', 'in', 'range' => [self::STATUS_COMMON, self::STATUS_DELETED]],
         ];
     }
 
@@ -65,7 +65,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id, 'status' => self::STATUS_COMMON]);
     }
 
     /**
@@ -114,7 +114,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username, 'status' => self::STATUS_COMMON]);
     }
 
     /**
@@ -206,6 +206,19 @@ class AdminUser extends ActiveRecord implements IdentityInterface
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }
+
+    /**
+     * Update AdminRole status by give IDs
+     *
+     * @param $ids
+     * @param $status
+     * @return int
+     */
+    public static function updateStatusByIDs($ids,$status = self::STATUS_COMMON){
+        $numberOfUpdate =  static::updateAll(['status'=>$status],['id'=>$ids]);
+        return $numberOfUpdate == count($ids);
+    }
+
     /**
      * Get Operations
      *
@@ -271,7 +284,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
                 'width'         =>  10 ,
                 'align'         =>  'left' ,
                 'values'        =>[
-                    AdminUser::STATUS_ACTIVE =>  '正常',
+                    AdminUser::STATUS_COMMON =>  '正常',
                     AdminUser::STATUS_DELETED => '删除',
                 ]
             ],
@@ -292,7 +305,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
                 'columns_type' =>  'int',
                 'values'       =>[
                     ''=>'全部',
-                    AdminUser::STATUS_ACTIVE =>  '正常',
+                    AdminUser::STATUS_COMMON =>  '正常',
                     AdminUser::STATUS_DELETED => '删除',
                 ]
             ],
@@ -347,7 +360,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
                 'name'         =>  'status' ,
                 'required'     =>  true,
                 'values'       => [
-                    AdminUser::STATUS_ACTIVE =>  '正常',
+                    AdminUser::STATUS_COMMON =>  '正常',
                     AdminUser::STATUS_DELETED => '删除',
                 ]
             ],
@@ -380,7 +393,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
                 'name'         =>  'status' ,
                 'required'     =>  true,
                 'values'       => [
-                    AdminUser::STATUS_ACTIVE =>  '正常',
+                    AdminUser::STATUS_COMMON =>  '正常',
                     AdminUser::STATUS_DELETED => '删除',
                 ]
             ],

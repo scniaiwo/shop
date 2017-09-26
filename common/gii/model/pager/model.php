@@ -35,6 +35,13 @@ use Yii;
  */
 class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . "\n" ?>
 {
+
+<?php foreach ($tableSchema->columns as $column):?>
+<?php if($column->name == 'status' ):?>
+        const STATUS_COMMON = 1;
+        const STATUS_DELETE = 2;
+<?php endif?>
+<?php endforeach; ?>
     /**
      * @inheritdoc
      */
@@ -179,6 +186,22 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }
+
+<?php foreach ($tableSchema->columns as $column):?>
+<?php if($column->name == 'status' ):?>
+    /**
+    * Update <?= $className ?> status by give IDs
+    *
+    * @param $ids
+    * @param $status
+    * @return int
+    */
+    public static function updateStatusByIDs($ids,$status = self::STATUS_COMMON){
+        $numberOfUpdate =  static::updateAll(['status'=>$status],['id'=>$ids]);
+        return $numberOfUpdate == count($ids);
+    }
+<?php endif?>
+<?php endforeach; ?>
     /**
     * Get Operations
     *

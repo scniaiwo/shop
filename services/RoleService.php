@@ -65,7 +65,7 @@ class RoleService extends AbstractService {
             $adminRoleMenu = AdminRoleMenu::create(['role_id'=>$roleID,'menu_id'=>$menuID]);
             $adminRoleMenu->id >0 && $numOfSave++;
         }
-        return $numOfSave == count($menuIDs) ? true:false;
+        return $numOfSave == count($menuIDs);
     }
 
     /**
@@ -95,7 +95,7 @@ class RoleService extends AbstractService {
         if($deleteMenuIDs){
             $numberOfDelete = AdminRoleMenu::deleteAll(['role_id'=>$roleID,'menu_id'=>$deleteMenuIDs]);
         }
-        return ($saveSuccess && count($deleteMenuIDs) == (int)$numberOfDelete)? true:false;
+        return ($saveSuccess && count($deleteMenuIDs) == (int)$numberOfDelete);
     }
 
     /**
@@ -121,7 +121,7 @@ class RoleService extends AbstractService {
             $adminUserRole = AdminUserRole::create(['user_id'=>$userID,'role_id'=>$roleID]);
             $adminUserRole->id >0 && $numOfSave++;
         }
-        return $numOfSave == count($roleIDs) ? true:false;
+        return $numOfSave == count($roleIDs);
     }
 
     /**
@@ -151,6 +151,6 @@ class RoleService extends AbstractService {
         if($deleteRoleIDs){
             $numberOfDelete = AdminUserRole::deleteAll(['user_id'=>$userID,'role_id'=>$deleteRoleIDs]);
         }
-        return ($saveSuccess && count($deleteRoleIDs) == (int)$numberOfDelete)? true:false;
+        return ($saveSuccess && count($deleteRoleIDs) == (int)$numberOfDelete);
     }
 }

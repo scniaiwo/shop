@@ -4,6 +4,7 @@ namespace backend\modules\admin\controllers;
 
 use backend\models\AdminRole;
 use backend\modules\admin\AdminBaseController;
+use helpers\CHtml;
 use helpers\CPager;
 use helpers\CRequest;
 use helpers\CSearch;
@@ -47,7 +48,11 @@ class RoleController extends AdminBaseController
             echo 'id is not exist!';exit;
         }
         $menuIDs = MenuService::factory()->getActiveRoleMenuIDs([$id]);
-        return $this->renderPartial('edit',array('role'=>$role,'menuIDs'=>array_flip($menuIDs)));
+        return $this->renderPartial('edit',[
+            'role'=>$role,
+            'editFieldsHtml' => CHtml::getEditFieldSet(AdminRole::getEditFields(),$role),
+            'menuIDs'=>array_flip($menuIDs)
+        ]);
     }
 
     /**
@@ -88,9 +93,8 @@ class RoleController extends AdminBaseController
             return CResponse::json(null,300,'Id can  not empty!');
         }
         $ids = explode(',',$ids);
-        $isSuccess = AdminRole::deleteByIDs($ids);
+        $isSuccess = AdminRole::updateStatusByIDs($ids,AdminRole::STATUS_DELETE);
         if($isSuccess){
-            RoleService::factory()->deleteRoleMenus($ids);
             return CResponse::json();
         }else{
             return CResponse::json(null,300,'Failure!');
@@ -103,15 +107,17 @@ class RoleController extends AdminBaseController
      * @author liupf 2017/9/16
      */
     public function actionAdd(){
-        $createForm = CRequest::param('createForm');
-        if( !$createForm ){
-            return $this->renderPartial('add');
+        $editForm = CRequest::param('editForm');
+        if( !$editForm ){
+            return $this->renderPartial('add',[
+                'editFieldsHtml' => CHtml::getEditFieldSet(AdminRole::getCreateFields(),null),
+            ]);
         }
-        $menuIDs    = $createForm['selectIDs'];
+        $menuIDs    = $editForm['selectIDs'];
         if(empty($menuIDs)){
             return CResponse::json(null,300,'Parameter error!');
         }
-        $role = AdminRole::create($createForm);
+        $role = AdminRole::create($editForm);
         if( $role->getErrors() ){
             return CResponse::json(null,300,CValidator::getError($role));
         }else{

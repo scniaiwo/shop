@@ -12,9 +12,12 @@ use Yii;
  * @property string $description
  * @property string $created_at
  * @property string $updated_at
+ * @property string $status
  */
 class AdminRole extends \yii\db\ActiveRecord
 {
+    const STATUS_COMMON = 1;
+    const STATUS_DELETE = 2;
     /**
      * @inheritdoc
      */
@@ -45,6 +48,7 @@ class AdminRole extends \yii\db\ActiveRecord
             'description' => 'Description',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'status'     => 'Status'
         ];
     }
     /**
@@ -68,6 +72,7 @@ class AdminRole extends \yii\db\ActiveRecord
         $model->attributes = $args;
         $model->created_at = date('Y-m-d H:i:s');
         $model->updated_at = date('Y-m-d H:i:s');
+        $model->status     = AdminRole::STATUS_COMMON;
         $model->save();
         return $model;
     }
@@ -124,21 +129,34 @@ class AdminRole extends \yii\db\ActiveRecord
         $numOfDelete =  static::deleteAll(['id'=>$ids]);
         return count($ids) == $numOfDelete ? true:false;
     }
+
+    /**
+     * Update AdminRole status by give IDs
+     *
+     * @param $ids
+     * @param $status
+     * @return int
+     */
+    public static function updateStatusByIDs($ids,$status = self::STATUS_COMMON){
+        $numberOfUpdate =  static::updateAll(['status'=>$status],['id'=>$ids]);
+        return $numberOfUpdate == count($ids);
+    }
+
     /**
      * Get Operations
      *
      * @return array.
      */
-    public function getOperations(){
+    public static  function getOperations(){
         return [
             'add'     => [
                 'url'    => '/admin/role/add',
-                'width'  => 1000,
+                'width'  => 600,
                 'height' => 580
             ],
             'edit'    => [
                 'url'    => '/admin/role/edit',
-                'width'  => 1000,
+                'width'  => 600,
                 'height' => 580
             ],
             'delete'  =>[
@@ -152,7 +170,7 @@ class AdminRole extends \yii\db\ActiveRecord
      *
      * @return array.
      */
-    public function getTableFields(){
+    public static function getTableFields(){
         return [
             [
                 'name'          =>  'id',
@@ -175,6 +193,31 @@ class AdminRole extends \yii\db\ActiveRecord
                 'width'         =>  10 ,
                 'align'         =>  'left' ,
             ],
+            [
+                'name'          =>  'created_at',
+                'orderField'    =>  true,
+                'label'         =>  '创建时间' ,
+                'width'         =>  10 ,
+                'align'         =>  'left' ,
+            ],
+            [
+                'name'          =>  'updated_at',
+                'orderField'    =>  true,
+                'label'         =>  '更新时间' ,
+                'width'         =>  10 ,
+                'align'         =>  'left' ,
+            ],
+            [
+                'name'          =>  'status',
+                'orderField'    =>  false,
+                'label'         =>  '状态' ,
+                'width'         =>  10 ,
+                'align'         =>  'left' ,
+                'values'        => [
+                    static::STATUS_COMMON => '正常',
+                    static::STATUS_DELETE => '删除',
+                ]
+            ],
         ];
     }
 
@@ -183,13 +226,95 @@ class AdminRole extends \yii\db\ActiveRecord
      *
      * @return array.
      */
-    public function getSearchFields(){
+    public static function getSearchFields(){
         return [
+            [
+                'type'         =>  'select',
+                'title'        =>  '',
+                'name'         =>  'status' ,
+                'columns_type' =>  'int',
+                'values'       =>[
+                    ''=>'全部',
+                    static::STATUS_COMMON =>  '正常',
+                    static::STATUS_DELETE => '删除',
+                ]
+            ],
             [
                 'type'         =>  'text',
                 'title'        =>  '权限名称',
                 'name'         =>  'name' ,
                 'columns_type' =>  'string',
+            ],
+            [
+                'type'         =>  'dateRange',
+                'title'        =>  '创建时间',
+                'name'         =>  'name' ,
+                'columns_type' =>  'datetime',
+                'values'        =>[
+                    '_gte' => '开始时间' ,
+                    '_lt' =>  '结束时间'
+                ]
+            ]
+        ];
+    }
+    /**
+     * Get edit fields
+     *
+     * @return array.
+     */
+    public static  function getEditFields(){
+        return [
+            [
+                'type'         =>  'text',
+                'label'        =>  '角色名称',
+                'name'         =>  'name' ,
+                'required'     =>  true
+            ],
+            [
+                'type'         =>  'text',
+                'label'        =>  '描述',
+                'name'         =>  'description' ,
+            ],
+            [
+                'type'         =>  'select',
+                'label'        =>  '状态',
+                'name'         =>  'status' ,
+                'required'     =>  true,
+                'values'       => [
+                    self::STATUS_COMMON =>  '正常',
+                    self::STATUS_DELETE => '删除',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Get create fields
+     *
+     * @return array.
+     */
+    public static  function getCreateFields(){
+        return [
+            [
+                'type'         =>  'text',
+                'label'        =>  '角色名称',
+                'name'         =>  'name' ,
+                'required'     =>  true
+            ],
+            [
+                'type'         =>  'text',
+                'label'        =>  '描述',
+                'name'         =>  'description' ,
+            ],
+            [
+                'type'         =>  'select',
+                'label'        =>  '状态',
+                'name'         =>  'status' ,
+                'required'     =>  true,
+                'values'       => [
+                    self::STATUS_COMMON =>  '正常',
+                    self::STATUS_DELETE => '删除',
+                ]
             ],
         ];
     }
